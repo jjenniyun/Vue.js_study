@@ -1,15 +1,5 @@
 <template>
-  <div class="black-bg" v-if="modalopen == true">
-    <div class="white-bg">
-      <h4>{{ oneroom[nowclick].title }}</h4>
-      <p>{{ oneroom[nowclick].content }}</p>
-      <img :src="oneroom[nowclick].image" style="50%">
-      <p>{{ oneroom[nowclick].price }}원</p>
-      <Discount />
-      <button @click="modalopen = false">닫기</button>
-    </div>
-
-  </div>
+  <Modal :oneroom="oneroom" :nowclick="nowclick" :modalopen="modalopen" />
 
   <div class="menu">
     <a v-for="a in menus" :key="a">{{ a }}</a>
@@ -17,22 +7,27 @@
 
   <Discount />
 
-  <div v-for="(a, i) in oneroom" :key="i">
-    <img :src="a.image" class="room-img">
-    <h4 @click="modalopen = true; nowclick = i">{{ a.title }}</h4>
-    <p>{{ a.price }}원</p>
-  </div>
+  <Card :oneroom="oneroom[i]" v-for="(room, i) in oneroom" :key="room" />
+
+  <!-- <div v-for="(a, i) in oneroom" :key="i"> -->
+  <!-- <img :src="a.image" class="room-img"> -->
+  <!-- <h4 @click="modalopen = true; nowclick = i">{{ a.title }}</h4> -->
+  <!-- <p>{{ a.price }}원</p> -->
+  <!-- </div> -->
 </template>
 
 <script>
 
 import data from './assets/oneroom.js';
 import Discount from './Discount.vue';
+import Modal from './Modal.vue';
+import Card from './Card.vue';
 
 export default {
   name: 'App',
   data() {
     return {
+      object: { name: 'kim', age: 20 },
       nowclick: 0,
       oneroom: data,
       modalopen: false,
@@ -48,6 +43,8 @@ export default {
   },
   components: {
     Discount,
+    Modal,
+    Card,
   }
 }
 </script>
