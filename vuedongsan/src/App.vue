@@ -1,13 +1,21 @@
 <template>
-  <Modal :oneroom="oneroom" :nowclick="nowclick" :modalopen="modalopen" />
+  <transition name="fade">
+    <Modal @closeModal="modalopen = false" :oneroom="oneroom" :nowclick="nowclick" :modalopen="modalopen" />
+  </transition>
 
   <div class="menu">
     <a v-for="a in menus" :key="a">{{ a }}</a>
   </div>
 
-  <Discount />
+  <Discount v-if="showDiscount == true" />
+  <!-- <p>지금 결제하면 {{ amount }}% 할인</p> -->
 
-  <Card :oneroom="oneroom[i]" v-for="(room, i) in oneroom" :key="room" />
+  <button @click="low_priceSort">낮은가격순</button>
+  <button @click="high_priceSort">높은가격순</button>
+  <button @click="titleSort">상품 가나다순</button>
+  <button @click="sortBack">되돌리기</button>
+
+  <Card @openModal="modalopen = true; nowclick = i" :oneroom="oneroom[i]" v-for="(room, i) in oneroom" :key="room" />
 
   <!-- <div v-for="(a, i) in oneroom" :key="i"> -->
   <!-- <img :src="a.image" class="room-img"> -->
@@ -27,6 +35,8 @@ export default {
   name: 'App',
   data() {
     return {
+      showDiscount: true,
+      oneroom_ori: [...data],
       object: { name: 'kim', age: 20 },
       nowclick: 0,
       oneroom: data,
@@ -34,13 +44,37 @@ export default {
       silen: [0, 0, 0],
       menus: ['Home', 'Shop', 'About'],
       products: ['역삼동원룸', '천호동원룸', '마포구원룸'],
+      amount: 30,
     }
   },
   methods: {
     increase() {
       this.silen++;
-    }
+    },
+    sortBack() {
+      this.oneroom = [...this.oneroom_ori];
+    },
+    low_priceSort() {
+      this.oneroom.sort(function (a, b) {
+        return a.price - b.price
+      });
+    },
+    high_priceSort() {
+      this.oneroom.sort(function (a, b) {
+        return b.price - a.price
+      });
+    },
+    titleSort() {
+      this.oneroom.sort(function (c, d) {
+        return c.title < d.title ? -1 : c.title > d.title ? 1 : 0
+      }); // 오름차순 정렬
+    },
   },
+  // mounted() {
+  // setInterval(() => {
+  // this.amount--;
+  // }, 1000);
+  // },
   components: {
     Discount,
     Modal,
@@ -50,6 +84,30 @@ export default {
 </script>
 
 <style>
+.fade-enter-from {
+  transform: translateY(-1000px);
+}
+
+.fade-enter-active {
+  transition: all 1s;
+}
+
+.fade-enter-to {
+  transform: translateY(0px);
+}
+
+.fade-leave-from {
+  opacity: 1;
+}
+
+.fade-leave-active {
+  transition: all 1s;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}
+
 body {
   margin: 0;
 }
