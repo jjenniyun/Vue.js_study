@@ -4,38 +4,74 @@
       <li>Cancel</li>
     </ul>
     <ul class="header-button-right">
-      <li>Next</li>
+      <li v-if="step == 1" @click="step++">Next</li>
+      <li v-if="step == 2" @click="publish">게시</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container :post="post" />
-
-  <div>임시박스</div>
+  <Container @write="write_post = $event" :post="post" :step="step" :image="image" />
+  <button @click="more">더보기</button>
 
   <div class="footer">
     <ul class="footer-button-plus">
-      <input type="file" id="file" class="inputfile" />
+      <input @change="upload" accept="image/*" multiple type="file" id="file" class="inputfile" />
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
 </template>
 
 <script>
-import postdata from './assets/postdata.js';
 import Container from './components/Container.vue';
+import postdata from './assets/postdata.js';
+import axios from 'axios';
 
 export default {
   name: 'App',
   data() {
     return {
+      step: 0,
       post: postdata,
+      onemore: 0,
+      image: '',
+      write_post: '',
     }
   },
   components: {
     Container,
-  }
-}
+  },
+  methods: {
+    publish() {
+      var mypost = {
+        name: "Hwang Min Hyun",
+        userImage: "https://placeimg.com/100/100/arch",
+        postImage: this.image,
+        likes: 100000,
+        date: "March 29",
+        liked: false,
+        content: this.write_post,
+        filter: "google"
+      };
+      this.post.unshift(mypost)
+      this.step = 0;
+    },
+    more() {
+      axios.get(`https://codingapple1.github.io/vue/more${this.onemore}.json`).then((result) => {
+        console.log(result.data);
+        this.post.push(result.data);
+        this.onemore++;
+      })
+    },
+    upload(e) {
+      let file_img = e.target.files;
+      //console.log(file_img[0].type);
+      let url = URL.createObjectURL(file_img[0]);
+      console.log(url);
+      this.image = url;
+      this.step++;
+    },
+  },
+};
 </script>
 
 <style>
