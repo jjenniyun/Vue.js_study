@@ -1,16 +1,10 @@
 <template>
-    <div>
-        <h5>{{ blog_list[0].title }}</h5>
-        <p>{{ blog_list[0].date }}</p>
+    <div v-for="(item, i) in blog_list" :key="i">
+        <!-- $router.go(1), go(-1) 뒤로가기 등 가능 -->
+        <h5 @click="$router.push(`/detail/${i}`)">{{ item.title }}</h5>
+        <p class="card-text">{{ item.content }}</p><br>
     </div>
-    <div>
-        <h5>{{ blog_list[1].title }}</h5>
-        <p>{{ blog_list[1].date }}</p>
-    </div>
-    <div>
-        <h5>{{ blog_list[2].title }}</h5>
-        <p>{{ blog_list[2].date }}</p>
-    </div>
+    <button type="button" class="btn btn-outline-dark" @click="$router.go(1)">Go</button><br><br>
 </template>
 
 <script>
@@ -19,7 +13,6 @@ export default {
     props: {
         blog_list: Array,
     }
-
 }
 </script>
 
