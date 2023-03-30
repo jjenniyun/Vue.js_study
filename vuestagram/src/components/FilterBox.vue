@@ -2,12 +2,18 @@
     <div :class="filter + ' filter-item'" :style="{ backgroundImage: `url(${image})` }">
         <!-- {{ filter }} -->
         <slot></slot>
+        <button @click="fire">적용</button>
     </div>
 </template>
 
 <script>
 export default {
     name: 'filterbox',
+    methods: {
+        fire() {
+            this.emitter.emit('emit', 'send')
+        }
+    },
     props: {
         image: String,
         filter: String,

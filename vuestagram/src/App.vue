@@ -37,6 +37,11 @@ export default {
       write_post: '',
     }
   },
+  mounted() {
+    this.emitter.on('emit', () => {
+      console.log(a)
+    });
+  },
   components: {
     Container,
   },
