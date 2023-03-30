@@ -35,11 +35,12 @@ export default {
       onemore: 0,
       image: '',
       write_post: '',
+      chofilter: '',
     }
   },
   mounted() {
-    this.emitter.on('emit', () => {
-      console.log(a)
+    this.emitter.on('emit', (a) => {
+      this.chofilter = a
     });
   },
   components: {
@@ -55,9 +56,9 @@ export default {
         date: "March 29",
         liked: false,
         content: this.write_post,
-        filter: "google"
+        filter: this.chofilter,
       };
-      this.post.unshift(mypost)
+      this.post.unshift(mypost);
       this.step = 0;
     },
     more() {

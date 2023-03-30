@@ -7,7 +7,7 @@
         <!-- 필터선택페이지 -->
         <div v-if="step == 1">
             <!-- :style="`background-image:url(${image})`" -->
-            <div class="upload-image" :style="{ backgroundImage: `url(${image})` }"></div>
+            <div :class="chofilter" class="upload-image" :style="{ backgroundImage: `url(${image})` }"></div>
             <div class="filters">
                 <FilterBox :filter="filter" :image="image" v-for="(filter, i) in filters" :key="filter">
                     <span>{{ filter }}</span>
@@ -17,7 +17,7 @@
 
         <!-- 글작성페이지 -->
         <div v-if="step == 2">
-            <div class="upload-image" :style="{ backgroundImage: `url(${image})` }"></div>
+            <div :class="chofilter" class="upload-image" :style="{ backgroundImage: `url(${image})` }"></div>
             <div class="write">
                 <textarea @input="$emit('write', $event.target.value)" class="write-box">write!</textarea>
             </div>
@@ -34,8 +34,14 @@ export default {
         return {
             filters: ["aden", "_1977", "brannan", "brooklyn", "clarendon", "earlybird", "gingham", "hudson",
                 "inkwell", "kelvin", "lark", "lofi", "maven", "mayfair", "moon", "nashville", "perpetua",
-                "reyes", "rise", "slumber", "stinson", "toaster", "valencia", "walden", "willow", "xpro2"]
+                "reyes", "rise", "slumber", "stinson", "toaster", "valencia", "walden", "willow", "xpro2"],
+            chofilter: '',
         }
+    },
+    mounted() {
+        this.emitter.on('emit', (a) => {
+            this.chofilter = a
+        })
     },
     components: {
         Post,

@@ -1,5 +1,5 @@
 <template>
-    <div :class="filter + ' filter-item'" :style="{ backgroundImage: `url(${image})` }">
+    <div @click="fire" :class="filter + ' filter-item'" :style="{ backgroundImage: `url(${image})` }">
         <!-- {{ filter }} -->
         <slot></slot>
         <button @click="fire">적용</button>
@@ -11,7 +11,7 @@ export default {
     name: 'filterbox',
     methods: {
         fire() {
-            this.emitter.emit('emit', 'send')
+            this.emitter.emit('emit', this.filter)
         }
     },
     props: {
