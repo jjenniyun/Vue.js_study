@@ -10,6 +10,8 @@
     <img src="./assets/logo.png" class="logo" />
   </div>
 
+  <h4>안녕 {{ $store.state.name }}</h4>
+
   <Container @write="write_post = $event" :post="post" :step="step" :image="image" />
   <button @click="more">더보기</button>
 
