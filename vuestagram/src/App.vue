@@ -5,15 +5,20 @@
     </ul>
     <ul class="header-button-right">
       <li v-if="step == 1" @click="step++">Next</li>
-      <li v-if="step == 2" @click="publish">게시</li>
+      <li v-if="step == 2" @click="publish">Post</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <h4>안녕 {{ $store.state.name }}</h4>
+  <p>{{ myname }} {{ age }} {{ likes }}</p>
+  <h4>안녕 {{ $store.state.age }}</h4>
+  <button @click="$store.commit('changeage', 10)">버튼</button>
+
+  <p>{{ $store.state.more }}</p>
+  <button @click="$store.dispatch('getData')">더보기</button>
 
   <Container @write="write_post = $event" :post="post" :step="step" :image="image" />
-  <button @click="more">더보기</button>
+  <!-- <button @click="more">더보기</button> -->
 
   <div class="footer">
     <ul class="footer-button-plus">
@@ -27,6 +32,7 @@
 import Container from './components/Container.vue';
 import postdata from './assets/postdata.js';
 import axios from 'axios';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'App',
@@ -38,6 +44,7 @@ export default {
       image: '',
       write_post: '',
       chofilter: '',
+      counter: 0,
     }
   },
   mounted() {
@@ -48,7 +55,16 @@ export default {
   components: {
     Container,
   },
+  computed: {
+    name() {
+      return this.$store.state.name;
+    },
+    // 축약 문법 mapState
+    ...mapState(['name', 'age', 'likes']),
+    ...mapState({ myname: 'name', })
+  },
   methods: {
+    ...mapMutations(['setMore', 'likes']),
     publish() {
       var mypost = {
         name: "Hwang Min Hyun",
