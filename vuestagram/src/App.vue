@@ -11,8 +11,9 @@
   </div>
 
   <p>{{ myname }} {{ age }} {{ likes }}</p>
+
   <h4>안녕 {{ $store.state.age }}</h4>
-  <button @click="$store.commit('changeage', 10)">버튼</button>
+  <button @click="changeage(10)">버튼</button>
 
   <p>{{ $store.state.more }}</p>
   <button @click="$store.dispatch('getData')">더보기</button>
@@ -64,7 +65,7 @@ export default {
     ...mapState({ myname: 'name', })
   },
   methods: {
-    ...mapMutations(['setMore', 'likes']),
+    ...mapMutations(['setMore', 'likes', 'changeage']),
     publish() {
       var mypost = {
         name: "Hwang Min Hyun",
