@@ -1,7 +1,7 @@
 <template>
     <div style="padding : 10px">
         <h4>팔로워</h4>
-        <input placeholder="⚡" />
+        <input placeholder="⚡" @input="search($event.target.value)" />
         <div class="post-header" v-for="(a, i) in follower" :key="i">
             <div class="profile" :style="`background-image:url(${a.image})`"></div>
             <span class="profile-name">{{ a.name }}</span>
@@ -19,15 +19,28 @@ export default {
     props: {
         one: Number,
     },
-    setup(props) {
+
+    setup() {
         let follower = ref([]);
+        let followerOrigin = ref([]); // 원본
 
-        let { one } = toRefs(props);
-        console.log(one.value);
+        onMounted(() => {
+            axios.get('/follower.json').then((a) => {
+                follower.value = a.data
+                followerOrigin.value = [...a.data];
+            })
+        });
+        // 검색 기능
+        function search(what) {
+            let newFollower = follower.value.filter((a) => {
+                return a.name.indexOf(what) != -1
+            });
+            follower.value = [...newFollower]
+        }
+        return { follower, search }
+        // let test = reactive({name:'kim'})
 
-        // watch(one, () => {
-
-        // })
+        // let { one } = toRefs(props);
 
         // let re = computed(() => { return follower.value.length })
         // console.log(re.value)
@@ -35,18 +48,6 @@ export default {
         // let store = useStore();
         // console.log(store.state.name)
         // console.log(store.commit())
-
-        onMounted(() => {
-            axios.get('/follower.json').then((a) => {
-                follower.value = a.data
-            })
-        })
-        return { follower }
-    },
-    data() {
-        return {
-
-        }
     },
 }
 </script>
